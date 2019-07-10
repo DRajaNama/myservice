@@ -67,7 +67,7 @@
                   <a href="#pablo" class="btn btn-just-icon btn-link">
                     <i class="fa fa-twitter"></i>
                   </a>
-                  <a href="#pablo" class="btn btn-just-icon btn-link">
+                  <a href="<?php echo $link['google_login']; ?>" class="btn btn-just-icon btn-link">
                     <i class="fa fa-google-plus"></i>
                   </a>
                 </div>

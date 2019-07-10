@@ -56,5 +56,6 @@ $route['login'] = 'front_end/authentication_controller/login';
 $route['register'] = 'front_end/authentication_controller/signup';
 $route['profile'] = 'front_end/authentication_controller/profile';
 $route['logout'] = 'front_end/authentication_controller/logout';
+$route['google_login'] = 'front_end/authentication_controller/google_login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
