@@ -132,7 +132,7 @@ class Authentication_controller extends CI_Controller {
 			}
 		 }
 	}
-	
+	//get google AccessToken only
 	function GetAccessToken($code) {	
 		$url = 'https://www.googleapis.com/oauth2/v4/token';			
 
