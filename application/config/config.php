@@ -27,6 +27,20 @@ $config['base_url'] = 'http://localhost/myservice/';
 
 $config['frontend_folder'] = 'front_end/';
 
+
+/* Facebook  Login */
+
+$config['facebook_app_id']              = '2304978606284697';
+$config['facebook_app_secret']          = '81d11719b34f061b192ca7a1726adea2';
+$config['facebook_login_type']          = 'web';
+$config['facebook_login_redirect_url']  = 'facebook-login';
+$config['facebook_logout_redirect_url'] = 'logout';
+$config['facebook_permissions']         = array('email');
+$config['facebook_graph_version']       = 'v2.6';
+$config['facebook_auth_on_load']        = TRUE;
+
+/* Facebook  Login */
+
 /*
 |--------------------------------------------------------------------------
 | Index File

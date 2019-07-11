@@ -10,7 +10,6 @@ class Authentication_controller extends CI_Controller {
 		define('CLIENT_ID', '915754452074-jnrvm2oga1lkdod1s32sam0qkh9kvd4c.apps.googleusercontent.com');
 		define('CLIENT_SECRET', '5GI1E_yuq4fJsxlzJEONvY9y');
 		define('CLIENT_REDIRECT_URL', 'http://localhost/myservice/google_login');
-		$this->google_login = 'https://accounts.google.com/o/oauth2/v2/auth?scope=' . urlencode('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email') . '&redirect_uri=' . urlencode(CLIENT_REDIRECT_URL) . '&response_type=code&client_id=' . CLIENT_ID . '&access_type=online';
 	} 
 	
 	public function index(){
@@ -19,9 +18,7 @@ class Authentication_controller extends CI_Controller {
 	
 	public function login(){
 		
-
 		$output['error'] = array('email'=>'','password'=>'');
-		$output['link'] = array('google_login'=>$this->google_login);
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('password', 'password', 'trim|required|md5|min_length[8]');
 		if($this->form_validation->run() === TRUE){
@@ -59,8 +56,6 @@ class Authentication_controller extends CI_Controller {
 	
 	public function signup(){
 		$output['error'] = array('email'=>'','password'=>'','name'=>'');
-		$output['link'] = array('google_login'=>$this->google_login);
-		
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email|is_unique[user_tbl.email]');
 		$this->form_validation->set_rules('password','Password','trim|required|md5|min_length[8]');
 		$this->form_validation->set_rules('name','name','trim|required');
@@ -130,6 +125,9 @@ class Authentication_controller extends CI_Controller {
 				}
 				
 			}
+		 }else{
+			 $this->google_login = 'https://accounts.google.com/o/oauth2/v2/auth?scope=' . urlencode('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email') . '&redirect_uri=' . urlencode(CLIENT_REDIRECT_URL) . '&response_type=code&client_id=' . CLIENT_ID . '&access_type=online';
+			 redirect($this->google_login); 
 		 }
 	}
 	//get google AccessToken only
@@ -149,6 +147,24 @@ class Authentication_controller extends CI_Controller {
 			throw new Exception('Error : Failed to receieve access token');
 		
 		return $data;
+	}
+	
+	public function facebook_login(){
+		$this->load->library('facebook');
+		$userData = array();
+		if($this->facebook->is_authenticated()){	
+			$user_data = $this->facebook->request('get', '/me?fields=id,first_name,last_name,email,gender,locale,picture');
+			$data = array(
+				'email'=>$user_data['email'],
+				'name'=>$user_data['first_name'].' '.$user_data['last_name']
+			); 
+			$this->updateApiEmail($data);
+		}
+		else
+		{
+            $data['authUrl'] =  $this->facebook->login_url();
+			redirect($data['authUrl']);
+        }
 	}
 	
 	public function updateApiEmail($data){
