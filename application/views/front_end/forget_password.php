@@ -57,20 +57,10 @@
       <div class="row">
         <div class="col-lg-4 col-md-6 ml-auto mr-auto">
           <div class="card card-login">
-            <form class="form" method="post" action="<?php echo base_url().'login';?>">
+            <form class="form" method="post" action="<?php echo base_url().'forget-password';?>">
               <div class="card-header card-header-primary text-center">
-                <h4 class="card-title">Login</h4>
-                <div class="social-line">
-                  <a href="<?php echo base_url().'facebook-login'; ?>" class="btn btn-just-icon btn-link">
-                    <i class="fa fa-facebook-square"></i>
-                  </a>
-                  <a href="#pablo" class="btn btn-just-icon btn-link">
-                    <i class="fa fa-twitter"></i>
-                  </a>
-                  <a href="<?php echo base_url().'google_login'; ?>" class="btn btn-just-icon btn-link">
-                    <i class="fa fa-google-plus"></i>
-                  </a>
-                </div>
+                <h4 class="card-title">Forget Password</h4>
+                
               </div>
               <p class="description text-center">Or Be Classical</p>
             <div class="card-body">
@@ -84,25 +74,11 @@
 				</div>
 				<span class="input-error"><?php if(form_error('email')){ echo form_error('email'); } ?></span>
 				<span class="input-error"><?php if($error['email']){ echo '<p>'.$error['email'].'</p>'; } ?></span>
-				<div class="input-group <?php if(form_error('password')){ ?> has-danger <?php } ?>">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="material-icons">lock_outline</i>
-                    </span>
-                  </div>
-                  <input type="password" class="form-control" placeholder="Password..." name="password" >
-                </div>
-				<span class="input-error"><?php if(form_error('password')){ echo form_error('password'); } ?></span>
-				<span class="input-error"><?php if($error['password']){ echo '<p>'.$error['password'].'</p>'; } ?><br>
-				 <?php if($error['password']){?>
-				 <a href="<?php echo base_url().'forget-password'; ?>" class="">forget password</a> <?php } ?>
-				</span>
 			</div>
               <div class="footer text-center">
-                <button type="submit" class="btn btn-primary btn-link btn-wd btn-lg">Get Started</button>
+                <button type="submit" class="btn btn-primary btn-link btn-wd btn-lg">Send Mail</button>
               </div>
-			  
-            </form>
+			</form>
           </div>
         </div>
       </div>

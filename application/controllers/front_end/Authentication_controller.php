@@ -71,6 +71,11 @@ class Authentication_controller extends CI_Controller {
 			);
 			
 			if($this->authentication_model->add($data)){
+				$send['to'] 		= $return_data['email'];
+				$send['subject'] 	= 'Activat Your Email! ';
+				$send['message'] 	= '<body><h1>Email Verification</h1><p>Dear '.$return_data['name'].',</p><p>Thanks for register your account with us. please <strong><a href="'.base_url('activate-email/'.md5($return_data['email'])).'">Click here</a></strong> to verify your account.<br></p><p>Thanks<br><b>Regards Team</b></p></body>';
+				//$this->sendMail($send);
+				
 				redirect(base_url().'login'); 
 			}else{
 				$output['error']['message'] = 'Error!, Please try again'; 
@@ -203,5 +208,62 @@ class Authentication_controller extends CI_Controller {
 		}else{
 			redirect(base_url().'login');
 		}
+	}
+	
+	public function forget_password(){
+		$output['error'] = array('email'=>'');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+		if($this->form_validation->run() === TRUE){
+			$email = $this->security->xss_clean($this->input->post('email'));
+			
+			$data = array(
+				'email' => $this->input->post('email')
+			); 
+			
+			$return_data = $this->authentication_model->get($data);
+			if($return_data){
+				$send['to'] 		= $return_data['email'];
+				$send['subject'] 	= 'App Demo - Forgot Password ! ';
+				$send['message'] 	= '<body><h1>Email Verification</h1><p>Dear '.$return_data['name'].',</p><p>Thanks for register your account with us. please <strong><a href="'.base_url('forget-password/'.md5($return_data['email'])).'">Click here</a></strong> to verify your account.<br></p><p>Thanks<br><b>Regards Team</b></p></body>';
+				//$this->sendMail($send);
+				redirect(base_url().'login'); 
+			}else{
+				$output['error']['email'] = 'Email address not found'; 
+			}
+		}else{
+			if($this->session->userdata('myservice_user')){
+				redirect(base_url().'profile');
+			}else{
+				$this->load->view($this->config->item('frontend_folder').'header');
+				$this->load->view($this->config->item('frontend_folder').'forget_password',$output);
+				$this->load->view($this->config->item('frontend_folder').'footer');
+			}
+		}
+	}
+	
+	public function sendMail($data){
+		$this->load->library('email');
+		
+		$from = array(
+			'email' => 'rajanamdav@gmail.com', 
+			'name' => 'APP DEMO',
+			'user' => $this->config->item('smtp_user')
+		);
+		
+        $reply_to = $from;
+		
+		$this->email->set_newline("\r\n");
+        $this->email->from($from['email'], $from['name'], $from['user']);
+		$this->email->reply_to($reply_to['email'],$reply_to['name']);
+        $this->email->to($data['to']);
+        $this->email->subject($data['subject']);
+        $this->email->message($data['message']);
+		$this->email->set_mailtype("html");		
+		
+        if ($this->email->send()) {
+            return true;
+        } else {
+            show_error($this->email->print_debugger());
+        }
 	}
 }

@@ -41,6 +41,24 @@ $config['facebook_auth_on_load']        = TRUE;
 
 /* Facebook  Login */
 
+/* mail config */
+
+$config['protocol'] = 'smtp'; // 'mail', 'sendmail', or 'smtp'
+$config['smtp_host'] =  'smtp.gmail.com'; 
+$config['smtp_port'] =  587;
+$config['smtp_user'] =  'chirayu.code@gmail.com';
+$config['smtp_pass'] =  'vuccykfumevrewds!';
+$config['smtp_crypto'] =  'ssl'; //can be 'ssl' or 'tls' for example
+$config['mailtype'] =  'html'; //plaintext 'text' mails or 'html'
+$config['smtp_timeout'] =  '4'; //in seconds
+    // 'charset' => 'iso-8859-1';
+$config['charset'] =  'utf-8';
+$config['wordwrap'] =  TRUE;
+
+
+
+/* mail config */
+
 /*
 |--------------------------------------------------------------------------
 | Index File
