@@ -25,6 +25,15 @@
 	   }
    }
    
+    public function update($data){
+		$this->db->where('email',$data['email']);
+	    if($this->db->update('user_tbl',$data)){
+			return true;
+		}else{
+		   return false;
+		}
+   }
+   
 }
 
 

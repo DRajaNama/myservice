@@ -59,5 +59,7 @@ $route['logout'] = 'front_end/authentication_controller/logout';
 $route['google_login'] = 'front_end/authentication_controller/google_login';
 $route['facebook-login'] = 'front_end/authentication_controller/facebook_login';
 $route['forget-password'] = 'front_end/authentication_controller/forget_password';
+$route['verify-code/(:any)'] = 'front_end/authentication_controller/verify_code/$1';
+$route['reset-password'] = 'front_end/authentication_controller/reset_password';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

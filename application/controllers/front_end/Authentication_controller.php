@@ -224,8 +224,11 @@ class Authentication_controller extends CI_Controller {
 			if($return_data){
 				$send['to'] 		= $return_data['email'];
 				$send['subject'] 	= 'App Demo - Forgot Password ! ';
-				$send['message'] 	= '<body><h1>Email Verification</h1><p>Dear '.$return_data['name'].',</p><p>Thanks for register your account with us. please <strong><a href="'.base_url('forget-password/'.md5($return_data['email'])).'">Click here</a></strong> to verify your account.<br></p><p>Thanks<br><b>Regards Team</b></p></body>';
+				$send['message'] 	= '<body><h1>Email Verification</h1><p>Dear '.$return_data['name'].',</p><p>Thanks for register your account with us. please <strong><a href="'.base_url('verify-code/'.md5($return_data['email'])).'">Click here</a></strong> to verify your account.<br></p><p>Thanks<br><b>Regards Team</b></p></body>';
 				//$this->sendMail($send);
+				$created_date = time()+3600;
+				$encCode  = base64_encode($email).'____'.md5($created_date);
+				echo base_url('verify-code/'.$encCode); die;
 				redirect(base_url().'login'); 
 			}else{
 				$output['error']['email'] = 'Email address not found'; 
@@ -238,6 +241,64 @@ class Authentication_controller extends CI_Controller {
 				$this->load->view($this->config->item('frontend_folder').'forget_password',$output);
 				$this->load->view($this->config->item('frontend_folder').'footer');
 			}
+		}
+	}
+	
+	public function reset_password(){
+		$output['error'] = array('email'=>'');
+		if($_POST){
+			
+		
+			$this->form_validation->set_rules('password', 'password', 'trim|required|md5');
+			$this->form_validation->set_rules('code', 'code', 'required');
+			if($this->form_validation->run() === TRUE){
+				$code = $this->input->post('code');
+				$password = $this->security->xss_clean($this->input->post('password'));
+				$cpassword = $this->security->xss_clean($this->input->post('cpassword'));
+				if($password == md5($cpassword)){
+					$ex_code = explode('____',$code);		
+					$decEmail = base64_decode($ex_code[0]);
+					$data = array(
+						'email' => $decEmail,
+						'password'=>$this->input->post('password')
+					); 
+					$return_data = $this->authentication_model->update($data);
+					if($return_data){
+						redirect(base_url().'login'); 
+					}else{
+						$output['error']['email'] = 'Email address not found'; 
+					}
+				}
+			}
+		}
+		if($this->session->userdata('myservice_user')){
+			redirect(base_url().'profile');
+		}else{
+			$this->load->view($this->config->item('frontend_folder').'header');
+			$this->load->view($this->config->item('frontend_folder').'reset_password',$output);
+			$this->load->view($this->config->item('frontend_folder').'footer');
+		}
+	}
+	
+	public function verify_code($code){
+		$output['error'] = array('email'=>'');
+		if($code != ''){
+			$ex_code = explode('____',$code);		
+			$decEmail = base64_decode($ex_code[0]);
+			
+			$data = array('email' => $decEmail); 
+			$return_data = $this->authentication_model->get($data);
+			
+			if($return_data){
+				redirect(base_url().'reset-password?code='.$code); 
+			}else{
+				$output['error']['email'] = 'Verification Code Expire'; 
+				$this->load->view($this->config->item('frontend_folder').'header');
+				$this->load->view($this->config->item('frontend_folder').'forget_password',$output);
+				$this->load->view($this->config->item('frontend_folder').'footer');
+			}
+		}else{
+			redirect(base_url().'login'); 
 		}
 	}
 	
